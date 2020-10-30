@@ -81,6 +81,7 @@ static __strong NSMutableArray *allSerialPorts;
 @property (nonatomic, strong) dispatch_source_t pinPollTimer;
 @property (nonatomic, strong) dispatch_source_t pendingRequestTimeoutTimer;
 @property (nonatomic, strong) dispatch_queue_t requestHandlingQueue;
+@property (nonatomic, strong) dispatch_queue_t delegateQueue;
 #else
 @property (nonatomic) dispatch_source_t readPollSource;
 @property (nonatomic) dispatch_source_t pinPollTimer;
@@ -174,6 +175,7 @@ static __strong NSMutableArray *allSerialPorts;
 		self.path = bsdPath;
 		self.name = [[self class] modemNameFromDevice:device];
 		self.requestHandlingQueue = dispatch_queue_create("com.openreelsoftware.ORSSerialPort.requestHandlingQueue", 0);
+        self.delegateQueue = dispatch_queue_create("com.scchn.ORSSerialPort.delegateQueue", 0);
 		self.packetDescriptorsAndBuffers = [NSMapTable strongToStrongObjectsMapTable];
 		self.requestsQueue = [NSMutableArray array];
 		self.baudRate = @B19200;
@@ -250,7 +252,7 @@ static __strong NSMutableArray *allSerialPorts;
 {
 	if (self.isOpen) return;
 	
-	dispatch_queue_t mainQueue = dispatch_get_main_queue();
+	dispatch_queue_t mainQueue = self.delegateQueue;
 
 	int descriptor=0;
 	descriptor = open([self.path cStringUsingEncoding:NSASCIIStringEncoding], O_RDWR | O_NOCTTY | O_EXLOCK | O_NONBLOCK);
@@ -523,7 +525,7 @@ static __strong NSMutableArray *allSerialPorts;
 		return;
 	}
 	
-	dispatch_async(dispatch_get_main_queue(), ^{
+	dispatch_async(self.delegateQueue, ^{
 		[self.delegate serialPort:self requestDidTimeout:request];
 		dispatch_async(self.requestHandlingQueue, ^{
 			[self sendNextRequest];
@@ -550,7 +552,7 @@ static __strong NSMutableArray *allSerialPorts;
 	self.pendingRequestTimeoutTimer = nil;
 	ORSSerialRequest *request = self.pendingRequest;
 	
-	dispatch_async(dispatch_get_main_queue(), ^{
+	dispatch_async(self.delegateQueue, ^{
 		if ([responseData length] &&
 			[self.delegate respondsToSelector:@selector(serialPort:didReceiveResponse:toRequest:)])
 		{
@@ -565,7 +567,7 @@ static __strong NSMutableArray *allSerialPorts;
 
 - (void)receiveData:(NSData *)data;
 {
-	dispatch_async(dispatch_get_main_queue(), ^{
+	dispatch_async(self.delegateQueue, ^{
 		if ([self.delegate respondsToSelector:@selector(serialPort:didReceiveData:)])
 		{
 			[self.delegate serialPort:self didReceiveData:data];
@@ -590,7 +592,7 @@ static __strong NSMutableArray *allSerialPorts;
 				if (![completePacket length]) continue;
 				
 				// Complete packet received, so notify delegate then clear buffer
-				dispatch_async(dispatch_get_main_queue(), ^{
+				dispatch_async(self.delegateQueue, ^{
 					if ([self.delegate respondsToSelector:@selector(serialPort:didReceivePacket:matchingDescriptor:)])
 					{
 						[self.delegate serialPort:self didReceivePacket:completePacket matchingDescriptor:descriptor];
@@ -781,9 +783,9 @@ static __strong NSMutableArray *allSerialPorts;
 	if ([NSThread isMainThread]) {
 		notifyBlock();
 	} else if (shouldWait) {
-		dispatch_sync(dispatch_get_main_queue(), notifyBlock);
+		dispatch_sync(self.delegateQueue, notifyBlock);
 	} else {
-		dispatch_async(dispatch_get_main_queue(), notifyBlock);
+		dispatch_async(self.delegateQueue, notifyBlock);
 	}
 }
 
