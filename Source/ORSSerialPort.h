@@ -340,7 +340,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  The delegate for the serial port object. Must implement the `ORSSerialPortDelegate` protocol.
- *
  */
 @property (nonatomic, weak, nullable) id<ORSSerialPortDelegate> delegate;
 
