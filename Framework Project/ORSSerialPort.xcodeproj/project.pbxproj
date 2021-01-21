@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		85017EF025B969CE008D2FF5 /* ORSSerialPort+Attributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 85017EEE25B969CE008D2FF5 /* ORSSerialPort+Attributes.h */; };
+		85017EF125B969CE008D2FF5 /* ORSSerialPort+Attributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 85017EEF25B969CE008D2FF5 /* ORSSerialPort+Attributes.m */; };
 		9D64D0E71B9CBC99009D1AEB /* ORSSerialBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D64D0E51B9CBC99009D1AEB /* ORSSerialBuffer.h */; };
 		9D64D0E81B9CBC99009D1AEB /* ORSSerialBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D64D0E61B9CBC99009D1AEB /* ORSSerialBuffer.m */; };
 		9D7472181B6D7767002D8B10 /* ORSSerialPort_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D7472171B6D7767002D8B10 /* ORSSerialPort_Tests.m */; };
@@ -36,6 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		85017EEE25B969CE008D2FF5 /* ORSSerialPort+Attributes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ORSSerialPort+Attributes.h"; sourceTree = "<group>"; };
+		85017EEF25B969CE008D2FF5 /* ORSSerialPort+Attributes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "ORSSerialPort+Attributes.m"; sourceTree = "<group>"; };
 		9D64D0E51B9CBC99009D1AEB /* ORSSerialBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORSSerialBuffer.h; sourceTree = "<group>"; };
 		9D64D0E61B9CBC99009D1AEB /* ORSSerialBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORSSerialBuffer.m; sourceTree = "<group>"; };
 		9D7472131B6D7767002D8B10 /* ORSSerialPort Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ORSSerialPort Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -146,6 +150,8 @@
 				9DD6B1D01B5F4338000AB46E /* ORSSerialPacketDescriptor.h */,
 				9DD6B1D11B5F4338000AB46E /* ORSSerialPacketDescriptor.m */,
 				9D64D0EA1B9CBCA4009D1AEB /* Private */,
+				85017EEE25B969CE008D2FF5 /* ORSSerialPort+Attributes.h */,
+				85017EEF25B969CE008D2FF5 /* ORSSerialPort+Attributes.m */,
 			);
 			name = Source;
 			path = ../Source;
@@ -167,6 +173,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85017EF025B969CE008D2FF5 /* ORSSerialPort+Attributes.h in Headers */,
 				9DCA893A1A2BB1E2009285EB /* ORSSerialPort.h in Headers */,
 				9DCA893E1A2BB1E2009285EB /* ORSSerialRequest.h in Headers */,
 				9DD6B1D21B5F4338000AB46E /* ORSSerialPacketDescriptor.h in Headers */,
@@ -287,6 +294,7 @@
 				9DD6B1D31B5F4338000AB46E /* ORSSerialPacketDescriptor.m in Sources */,
 				9DCA893B1A2BB1E2009285EB /* ORSSerialPort.m in Sources */,
 				9DCA893D1A2BB1E2009285EB /* ORSSerialPortManager.m in Sources */,
+				85017EF125B969CE008D2FF5 /* ORSSerialPort+Attributes.m in Sources */,
 				9D64D0E81B9CBC99009D1AEB /* ORSSerialBuffer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
