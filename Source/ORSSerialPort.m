@@ -349,11 +349,13 @@ static __strong NSMutableArray *allSerialPorts;
 	self.fileDescriptor = 0;
 	
     if ([self.delegate respondsToSelector:@selector(serialPortWasClosed:)]) {
-		[(id)self.delegate performSelectorOnMainThread:@selector(serialPortWasClosed:) withObject:self waitUntilDone:YES];
-		dispatch_async(self.requestHandlingQueue, ^{
-			self.requestsQueue = [NSMutableArray array]; // Cancel all queued requests
-			self.pendingRequest = nil; // Discard pending request
-		});
+		dispatch_async(self.delegateQueue, ^{
+            [(id)self.delegate serialPortWasClosed:self];
+            dispatch_async(self.requestHandlingQueue, ^{
+                self.requestsQueue = [NSMutableArray array]; // Cancel all queued requests
+                self.pendingRequest = nil; // Discard pending request
+            });
+        });
 	}
 }
 
