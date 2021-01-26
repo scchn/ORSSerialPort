@@ -737,17 +737,18 @@ static __strong NSMutableArray *allSerialPorts;
 										 code:errno
 									 userInfo:errDict];
 	
-	void (^notifyBlock)(void) = ^{
-		[self.delegate serialPort:self didEncounterError:error];
-	};
-	
-	if ([NSThread isMainThread]) {
-        dispatch_async(self.delegateQueue, notifyBlock);
-	} else if (shouldWait) {
-		dispatch_sync(self.delegateQueue, notifyBlock);
-	} else {
-		dispatch_async(self.delegateQueue, notifyBlock);
-	}
+    if (shouldWait) {
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+        dispatch_async(self.delegateQueue, ^{
+            [self.delegate serialPort:self didEncounterError:error];
+            dispatch_semaphore_signal(semaphore);
+        });
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    } else {
+        dispatch_async(self.delegateQueue, ^{
+            [self.delegate serialPort:self didEncounterError:error];
+        });
+    }
 }
 
 #pragma mark - Properties
